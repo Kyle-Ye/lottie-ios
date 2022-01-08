@@ -87,7 +87,7 @@ final class ShapeRenderLayer: ShapeContainerLayer {
   override func draw(in ctx: CGContext) {
     if let path = renderer.outputPath {
       if !path.isEmpty {
-        ctx.addPath(path)
+        ctx.addPath(CGPath(rect: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), transform: nil))
       }
     }
     renderer.render(ctx)

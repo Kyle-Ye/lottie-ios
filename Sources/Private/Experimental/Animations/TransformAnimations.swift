@@ -118,17 +118,10 @@ extension CALayer {
       for: .anchorPoint,
       keyframes: transformModel.anchorPoint.keyframes,
       value: { absoluteAnchorPoint in
-        guard bounds.width > 0, bounds.height > 0 else {
-          assertionFailure("Size must be non-zero before an animation can be played")
-          return .zero
-        }
-
         // Lottie animation files express anchorPoint as an absolute point value,
         // so we have to divide by the width/height of this layer to get the
         // relative decimal values expected by Core Animation.
-        return CGPoint(
-          x: CGFloat(absoluteAnchorPoint.x) / bounds.width,
-          y: CGFloat(absoluteAnchorPoint.y) / bounds.height)
+        percentBasedPoint(from: absoluteAnchorPoint)
       },
       context: context)
   }
@@ -176,4 +169,23 @@ extension CALayer {
       context: context)
   }
 
+}
+
+extension CALayer {
+  /// Converts the given `Vector3D`, representing a point in absolute pixel values
+  /// to a percent-based point relative to the size of this layer.
+  ///  - This representation is used by properties like `CALayer.anchorPoint`
+  ///    and `CAGradientLayer.startPoint` / `CAGradientLayer.endPoint`.
+  ///  - For example, if this layer had `size = (200, 200)`,
+  ///    then the percent-based point of `(100, 100)` would be `(0.5, 0.5)`.
+  func percentBasedPoint(from absolutePoint: Vector3D) -> CGPoint {
+    guard bounds.width > 0, bounds.height > 0 else {
+      assertionFailure("Size must be non-zero before an animation can be played")
+      return .zero
+    }
+
+    return CGPoint(
+      x: CGFloat(absolutePoint.x) / bounds.width,
+      y: CGFloat(absolutePoint.y) / bounds.height)
+  }
 }

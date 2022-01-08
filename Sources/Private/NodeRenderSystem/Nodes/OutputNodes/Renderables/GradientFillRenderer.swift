@@ -136,6 +136,15 @@ final class GradientFillRenderer: PassThroughOutputNode, Renderable {
     else { return }
     if type == .linear {
       inContext.drawLinearGradient(gradient, start: start, end: end, options: [.drawsAfterEndLocation, .drawsBeforeStartLocation])
+
+      inContext.setFillColor(CGColor.rgb(1, 0, 0))
+      inContext.addEllipse(in: CGRect(x: start.x - 20, y: start.y - 20, width: 40, height: 40))
+      inContext.drawPath(using: .fill)
+
+      inContext.setFillColor(CGColor.rgb(0, 0, 1))
+      inContext.addEllipse(in: CGRect(x: end.x - 20, y: end.y - 20, width: 40, height: 40))
+      inContext.drawPath(using: .fill)
+
     } else {
       inContext.drawRadialGradient(
         gradient,
